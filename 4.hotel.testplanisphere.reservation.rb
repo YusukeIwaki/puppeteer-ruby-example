@@ -4,7 +4,7 @@ Puppeteer.launch(headless: false, slow_mo: 50, args: ['--guest', '--window-size=
   page = browser.pages.first || browser.new_page
   page.emulate(Puppeteer::Devices.iPhone_X)
 
-  page.goto('https://hotel.testplanisphere.dev/')
+  page.goto('https://hotel.testplanisphere.dev/ja/')
 
   page.click("button.navbar-toggler")
   sleep 1 # wait for menu opened.
