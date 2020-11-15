@@ -11,3 +11,6 @@
 /Gemfile.lock
 /vendor/bundle
 /vendor/path
+
+*.png
+*.pdf
