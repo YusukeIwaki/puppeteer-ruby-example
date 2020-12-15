@@ -28,23 +28,28 @@ Puppeteer.launch(headless: false, slow_mo: 50, args: ['--guest', '--window-size=
   new_page.emulate(Puppeteer::Devices.iPhone_X)
   new_page.wait_for_selector('input[name="term"]')
   new_page.click('input[name="term"]')
-  3.times { new_page.keyboard.press("ArrowRight") }
-  new_page.keyboard.down("Shift")
-  3.times { new_page.keyboard.press("ArrowLeft") }
-  new_page.keyboard.up("Shift")
-  new_page.keyboard.press("5")
-  new_page.keyboard.press("Tab")
-  new_page.keyboard.press("2")
-  new_page.keyboard.press("Tab")
-  new_page.keyboard.press("Tab")
-  new_page.keyboard.press("Space")
+  new_page.keyboard do
+    3.times { press("ArrowRight") }
+    down("Shift")
+    3.times { press("ArrowLeft") }
+    up("Shift")
+    press("5")
+    press("Tab")
+    press("2")
+    press("Tab")
+    press("Tab")
+    press("Space")
+  end
   new_page.click('input[name="username"]')
   new_page.keyboard.type_text("puppeteer")
   new_page.select('select[name="contact"]', "email")
   new_page.wait_for_selector('input[name="email"]')
-  new_page.type_text('input[name="email"]', "puppeteer@example.com")
-  new_page.keyboard.press("Tab")
-  new_page.keyboard.type_text('Automation with puppeteer-ruby')
+  new_page.click('input[name="email"]');
+  new_page.keyboard do
+    type_text("puppeteer@example.com")
+    press("Tab")
+    type_text('Automation with puppeteer-ruby')
+  end
 
   await_all(
     new_page.async_wait_for_navigation,
