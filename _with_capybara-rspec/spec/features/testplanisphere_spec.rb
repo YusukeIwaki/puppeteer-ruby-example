@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe 'hotel.testplanisphere.dev', type: :feature do
   before {
-    visit 'https://hotel.testplanisphere.dev/'
+    visit 'https://hotel.testplanisphere.dev/ja/'
     @browser = Puppeteer.connect(
                 browser_url: 'http://localhost:9222',
                 default_viewport: Puppeteer::Viewport.new(width: 1280, height: 800))
