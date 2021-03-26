@@ -4,32 +4,29 @@ Puppeteer.launch(slow_mo: 50, headless: true) do |browser|
   page = browser.pages.first || browser.new_page
   page.viewport = Puppeteer::Viewport.new(width: 1200, height: 800, device_scale_factor: 2)
 
-  username = 'AndroidDev'
+  username = 'YusukeIwaki'
   searchable = true
 
-  page.goto("https://twitter.com/#{username}")
-  page.wait_for_selector("article")
-  page.Seval("article", "tweet => tweet.click()")
-  page.wait_for_selector 'article', visible: true
-
-  overlay = page.S('article')
+  page.goto("https://github.com/#{username}")
+  page.wait_for_selector(".js-yearly-contributions")
+  overlay = page.query_selector('.js-yearly-contributions')
 
   if searchable
     js = <<-JAVASCRIPT
-    tweet => {
-      const width = getComputedStyle(tweet).width;
-      tweet = tweet.cloneNode(true);
-      tweet.style.width = width;
+    graph => {
+      const width = getComputedStyle(graph).width;
+      graph = graph.cloneNode(true);
+      graph.style.width = width;
       document.body.innerHTML = `
         <div style="display:flex;justify-content:center;align-items:center;height:100vh;">;
-          ${tweet.outerHTML}
+          ${graph.outerHTML}
         </div>
       `;
     }
     JAVASCRIPT
     page.evaluate(js, overlay)
   else
-    screenshot = overlay.screenshot(path: '5.element-to-pdf.tweet.png')
+    screenshot = overlay.screenshot(path: '5.element-to-pdf.github.png')
 
     require 'base64'
     page.content = <<-HTML
@@ -58,5 +55,10 @@ Puppeteer.launch(slow_mo: 50, headless: true) do |browser|
     </html>
     HTML
   end
-  page.pdf(path: '5.element-to-pdf.tweet.pdf', print_background: true)
+  page.pdf(
+    path: '5.element-to-pdf.github.pdf',
+    print_background: true,
+    format: "letter",
+    margin: "1cm",
+  )
 end
