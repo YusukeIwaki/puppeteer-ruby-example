@@ -9,11 +9,10 @@ Puppeteer.launch do |browser|
   input.focus
   page.keyboard.type_text("Ruby headless driver for Chrome")
 
-  await_all(
-    page.async_wait_for_navigation,
-    page.keyboard.async_press(:Enter),
-  )
+  page.wait_for_navigation do
+    page.keyboard.press(:Enter)
+  end
 
   page.wait_for_selector("a > h3")
-  puts page.S("a > h3").evaluate("el => el.textContent") # => "rubycdp/ferrum: Ruby Chrome/Chromium driver - GitHub"
+  puts page.query_selector("a > h3").evaluate("el => el.textContent") # => "rubycdp/ferrum: Ruby Chrome/Chromium driver - GitHub"
 end

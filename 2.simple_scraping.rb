@@ -5,18 +5,18 @@ Puppeteer.launch(headless: false, slow_mo: 50, args: ['--guest', '--window-size=
   page.viewport = Puppeteer::Viewport.new(width: 1280, height: 800)
   page.goto("https://github.com/", wait_until: 'domcontentloaded')
 
-  form = page.S("form.js-site-search-form")
-  searchInput = form.S("input.header-search-input")
-  searchInput.type_text("puppeteer")
-  await_all(
-    page.async_wait_for_navigation,
-    searchInput.async_press("Enter"),
-  )
+  form = page.query_selector("form.js-site-search-form")
+  search_input = form.query_selector("input.header-search-input")
+  search_input.type_text("puppeteer")
 
-  list = page.S("ul.repo-list")
-  items = list.SS("div.f4")
+  page.wait_for_navigation do
+    search_input.press('Enter')
+  end
+
+  list = page.query_selector("ul.repo-list")
+  items = list.query_selector_all("div.f4")
   items.each do |item|
-    title = item.Seval("a", "a => a.innerText")
+    title = item.eval_on_selector("a", "a => a.innerText")
     puts("==> #{title}")
   end
 end
