@@ -8,22 +8,22 @@ Puppeteer.launch(headless: false, slow_mo: 50, args: ['--guest', '--window-size=
 
   page.click("button.navbar-toggler")
   sleep 1 # wait for menu opened.
-  reservation_link = page.SS('#navbarNav li').find do |item|
+  reservation_link = page.query_selector_all('#navbarNav li').find do |item|
     item.evaluate('(el) => el.textContent').strip == '宿泊予約'
   end
-  await_all(
-    page.async_wait_for_navigation,
-    reservation_link.async_click,
-  )
+
+  page.wait_for_navigation do
+    reservation_link.click
+  end
 
   page.wait_for_selector('#plan-list .card')
-  simple_stay_card = page.SS('#plan-list .card').find do |card|
+  simple_stay_card = page.query_selector_all('#plan-list .card').find do |card|
     card.evaluate('(el) => el.textContent').strip.include?('素泊まり')
   end
-  new_page = await_all(
-    resolvable_future { |f| page.once('popup') { |new_page| f.fulfill(new_page) } },
-    simple_stay_card.S('.btn').async_click,
-  ).first
+  popup_promise = resolvable_future { |f| page.once('popup') { |new_page| f.fulfill(new_page) } }
+  new_page = popup_promise.with_waiting_for_complete do
+    simple_stay_card.query_selector('.btn').click
+  end
 
   new_page.emulate(Puppeteer::Devices.iPhone_X)
   new_page.wait_for_selector('input[name="term"]')
@@ -51,10 +51,9 @@ Puppeteer.launch(headless: false, slow_mo: 50, args: ['--guest', '--window-size=
     type_text('Automation with puppeteer-ruby')
   end
 
-  await_all(
-    new_page.async_wait_for_navigation,
-    new_page.async_click('#submit-button'),
-  )
+  new_page.wait_for_navigation do
+    new_page.click('#submit-button')
+  end
 
   new_page.wait_for_xpath('//button[text() = "この内容で予約する"]')
   new_page.Sx('//button[text() = "この内容で予約する"]').first.click
