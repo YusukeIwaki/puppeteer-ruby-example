@@ -59,6 +59,11 @@ Puppeteer.launch(slow_mo: 50, headless: true) do |browser|
     path: '5.element-to-pdf.github.pdf',
     print_background: true,
     format: "letter",
-    margin: "1cm",
+    margin: {
+      top: "1cm",
+      right: "1cm",
+      bottom: "1cm",
+      left: "1cm"
+    },
   )
 end
