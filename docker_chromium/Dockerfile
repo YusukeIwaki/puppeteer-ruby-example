@@ -1,4 +1,4 @@
-FROM ruby:2.6-alpine
+FROM ruby:3.2-alpine
 
 WORKDIR /app
 
@@ -22,3 +22,4 @@ RUN apk update \
     && fc-cache -fv
 
 ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
+ENV CHROMIUM_FLAGS "--no-sandbox --disable-setuid-sandbox"
