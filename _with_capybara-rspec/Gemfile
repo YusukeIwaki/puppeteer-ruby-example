@@ -7,4 +7,4 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gem 'selenium-webdriver'
 gem 'capybara'
 gem 'rspec'
-gem 'puppeteer-ruby'
+gem 'puppeteer-ruby', '0.50.0.alpha6'

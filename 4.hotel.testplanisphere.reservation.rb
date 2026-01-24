@@ -23,10 +23,10 @@ Puppeteer.launch(headless: false, slow_mo: 50, args: ['--guest', '--window-size=
   simple_stay_card = page.query_selector_all('#plan-list .card').find do |card|
     card.evaluate('(el) => el.textContent').strip.include?('素泊まり')
   end
-  popup_promise = resolvable_future { |f| page.once('popup') { |new_page| f.fulfill(new_page) } }
-  new_page = popup_promise.with_waiting_for_complete do
-    simple_stay_card.query_selector('.btn').click
-  end
+  popup_promise = Async::Promise.new
+  page.once('popup') { |new_page| popup_promise.resolve(new_page) }
+  simple_stay_card.query_selector('.btn').click
+  new_page = popup_promise.wait
 
   new_page.emulate(Puppeteer::Devices.iPhone_X)
   new_page.wait_for_selector('input[name="term"]')

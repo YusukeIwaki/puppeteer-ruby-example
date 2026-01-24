@@ -2,4 +2,4 @@
 
 source "https://rubygems.org"
 
-gem 'puppeteer-ruby'
+gem 'puppeteer-ruby', '0.50.0.alpha6'
