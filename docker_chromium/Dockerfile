@@ -10,16 +10,14 @@ RUN apk update \
     && bundle install \
     && apk del build-deps
 
+# Install Chromium and fonts (including CJK support)
 RUN apk update \
     && apk add --no-cache \
     chromium \
     font-noto \
+    font-noto-cjk \
     fontconfig \
-    && wget https://noto-website.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip \
-    && mkdir -p /usr/share/fonts/NotoSansCJKjp \
-    && unzip NotoSansCJKjp-hinted.zip -d /usr/share/fonts/NotoSansCJKjp/ \
-    && rm NotoSansCJKjp-hinted.zip \
     && fc-cache -fv
 
-ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
-ENV CHROMIUM_FLAGS "--no-sandbox --disable-setuid-sandbox"
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV CHROMIUM_FLAGS="--no-sandbox --disable-setuid-sandbox"

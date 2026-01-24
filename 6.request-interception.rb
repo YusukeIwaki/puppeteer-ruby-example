@@ -1,7 +1,9 @@
 require 'puppeteer'
 require 'open-uri'
 
-open('https://developers.google.com/web/tools/images/puppeteer.png') do |f|
+# Ruby 3.0+ requires URI.open instead of open
+# Using Puppeteer logo from GitHub
+URI.open('https://user-images.githubusercontent.com/10379601/29446482-04f7036a-841f-11e7-9872-91d1fc2ea683.png') do |f|
   content_type = f.content_type
   data = f.read
 
@@ -9,7 +11,8 @@ open('https://developers.google.com/web/tools/images/puppeteer.png') do |f|
     page = browser.pages.first || browser.new_page
     page.viewport = Puppeteer::Viewport.new(width: 1280, height: 800)
 
-    page.goto('https://www.bing.com/images/search?q=microsoft+edge')
+    # Use a simpler site with images
+    page.goto('https://en.wikipedia.org/wiki/Puppeteer_(software)', wait_until: 'networkidle2', timeout: 60000)
 
     # Replace all images with Puppeteer logo :)
     page.request_interception = true
@@ -24,7 +27,7 @@ open('https://developers.google.com/web/tools/images/puppeteer.png') do |f|
       end
     end
 
-    page.reload
+    page.reload(wait_until: 'networkidle2', timeout: 60000)
     page.screenshot(path: '6.request-interception.png')
   end
 end

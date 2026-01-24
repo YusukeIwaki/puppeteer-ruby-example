@@ -9,7 +9,7 @@ Puppeteer.launch(**launch_options) do |browser|
   page = browser.pages.first || browser.new_page
   page.emulate(Puppeteer::Devices.iPhone_X)
 
-  page.goto('https://hotel.testplanisphere.dev/ja/')
+  page.goto('https://hotel-example-site.takeyaqa.dev/ja/')
 
   page.click("button.navbar-toggler")
   sleep 1 # wait for menu opened.

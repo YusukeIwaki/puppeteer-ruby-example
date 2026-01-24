@@ -1,10 +1,13 @@
 require 'puppeteer'
 
+# NOTE: The testplanisphere.dev site is currently unavailable (HTTP error).
+# This sample may not work until the site is restored.
+
 Puppeteer.launch(headless: false, slow_mo: 50, args: ['--guest', '--window-size=1280,800']) do |browser|
   page = browser.pages.first || browser.new_page
   page.emulate(Puppeteer::Devices.iPhone_X)
 
-  page.goto('https://hotel.testplanisphere.dev/ja/')
+  page.goto('https://hotel-example-site.takeyaqa.dev/ja/')
 
   page.click("button.navbar-toggler")
   sleep 1 # wait for menu opened.

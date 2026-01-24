@@ -7,7 +7,7 @@ Puppeteer.launch(slow_mo: 50, headless: true) do |browser|
   username = 'YusukeIwaki'
   searchable = true
 
-  page.goto("https://github.com/#{username}")
+  page.goto("https://github.com/#{username}", wait_until: 'networkidle2', timeout: 60000)
   page.wait_for_selector(".js-yearly-contributions")
   overlay = page.query_selector('.js-yearly-contributions')
 

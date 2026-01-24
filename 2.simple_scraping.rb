@@ -1,22 +1,21 @@
 require 'puppeteer'
 
+# GitHub's UI has been updated significantly. This sample now uses direct URL navigation
+# to the search results page for more reliable operation.
 Puppeteer.launch(headless: false, slow_mo: 50, args: ['--guest', '--window-size=1280,800']) do |browser|
   page = browser.pages.first || browser.new_page
   page.viewport = Puppeteer::Viewport.new(width: 1280, height: 800)
-  page.goto("https://github.com/", wait_until: 'domcontentloaded')
 
-  form = page.query_selector("form.js-site-search-form")
-  search_input = form.query_selector("input.header-search-input")
-  search_input.type_text("puppeteer")
+  # Navigate directly to search results page
+  page.goto("https://github.com/search?q=puppeteer&type=repositories", wait_until: 'networkidle2', timeout: 60000)
 
-  page.wait_for_navigation do
-    search_input.press('Enter')
-  end
+  # Wait for search results and extract repository names
+  page.wait_for_selector('div[data-testid="results-list"]', timeout: 30000)
 
-  list = page.query_selector("ul.repo-list")
-  items = list.query_selector_all("div.f4")
-  items.each do |item|
-    title = item.eval_on_selector("a", "a => a.innerText")
+  # Get all repository links from search results
+  items = page.query_selector_all('div[data-testid="results-list"] h3 a')
+  items.first(10).each do |item|
+    title = item.evaluate('el => el.innerText')
     puts("==> #{title}")
   end
 end
