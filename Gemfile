@@ -4,4 +4,4 @@ source "https://rubygems.org"
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-gem 'puppeteer-ruby', '0.50.0.alpha6'
+gem 'puppeteer-ruby'

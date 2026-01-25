@@ -12,7 +12,7 @@ URI.open('https://user-images.githubusercontent.com/10379601/29446482-04f7036a-8
     page.viewport = Puppeteer::Viewport.new(width: 1280, height: 800)
 
     # Use a simpler site with images
-    page.goto('https://en.wikipedia.org/wiki/Puppeteer_(software)', wait_until: 'networkidle2', timeout: 60000)
+    page.goto('https://en.wikipedia.org/wiki/Google', wait_until: 'networkidle2', timeout: 60000)
 
     # Replace all images with Puppeteer logo :)
     page.request_interception = true
