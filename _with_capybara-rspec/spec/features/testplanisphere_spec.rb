@@ -19,7 +19,7 @@ RSpec.describe 'hotel.testplanisphere.dev', type: :feature do
 
     reservation_link = puppeteer_page.SS('li.nav-item')[1]
 
-    await_all(
+    Puppeteer::AsyncUtils.await_promise_all(
       puppeteer_page.async_wait_for_navigation,
       reservation_link.async_click,
     )

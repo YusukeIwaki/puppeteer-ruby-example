@@ -16,7 +16,7 @@ Puppeteer.launch(**launch_options) do |browser|
   reservation_link = page.SS('#navbarNav li').find do |item|
     item.evaluate('(el) => el.textContent').strip == '宿泊予約'
   end
-  await_all(
+  Puppeteer::AsyncUtils.await_promise_all(
     page.async_wait_for_navigation,
     reservation_link.async_click,
   )
@@ -25,10 +25,10 @@ Puppeteer.launch(**launch_options) do |browser|
   simple_stay_card = page.SS('#plan-list .card').find do |card|
     card.evaluate('(el) => el.textContent').strip.include?('素泊まり')
   end
-  new_page = await_all(
-    resolvable_future { |f| page.once('popup') { |new_page| f.fulfill(new_page) } },
-    simple_stay_card.S('.btn').async_click,
-  ).first
+  popup_promise = Async::Promise.new
+  page.once('popup') { |new_page| popup_promise.resolve(new_page) }
+  simple_stay_card.S('.btn').click
+  new_page = popup_promise.wait
 
   new_page.emulate(Puppeteer::Devices.iPhone_X)
   new_page.wait_for_selector('input[name="term"]')
@@ -51,7 +51,7 @@ Puppeteer.launch(**launch_options) do |browser|
   new_page.keyboard.press("Tab")
   new_page.keyboard.type_text('Automation with puppeteer-ruby')
 
-  await_all(
+  Puppeteer::AsyncUtils.await_promise_all(
     new_page.async_wait_for_navigation,
     new_page.async_click('#submit-button'),
   )
